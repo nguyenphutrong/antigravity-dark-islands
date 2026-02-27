@@ -569,6 +569,64 @@
       "opacity": "0 !important"
    },
 
+   "// ─── Agent Manager ───": "",
+   ".agent-manager-view": {
+      "background-color": "var(--islands-bg-canvas) !important"
+   },
+   ".agent-manager-view .monaco-list-row": {
+      "border-radius": "var(--islands-item-radius) !important",
+      "margin-left": "4px !important",
+      "margin-right": "4px !important",
+      "margin-bottom": "4px !important",
+      "width": "calc(100% - 8px) !important",
+      "transition": "background 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important"
+   },
+   ".agent-manager-view .monaco-list-row:hover": {
+      "background": "linear-gradient(135deg, rgba(49,50,56,0.3), rgba(37,38,44,0.2)) !important",
+      "outline": "none !important"
+   },
+   ".agent-manager-view .monaco-list-row.selected": {
+      "background": "transparent !important",
+      "box-shadow": "none !important",
+      "outline": "none !important"
+   },
+   ".agent-manager-view .monaco-list-row.focused": {
+      "background": "linear-gradient(135deg, rgba(49,50,56,0.6), rgba(37,38,44,0.4)) !important",
+      "box-shadow": "inset 0 0 0 1px rgba(255,255,255,0.05) !important",
+      "outline": "none !important"
+   },
+   ".agent-manager-card": {
+      "background-color": "var(--islands-bg-surface) !important",
+      "border-radius": "var(--islands-widget-radius) !important",
+      "border": "1px solid rgba(255,255,255,0.08) !important",
+      "box-shadow": "0 2px 8px 0 rgba(0,0,0,0.3) !important"
+   },
+   ".agent-manager-card:hover": {
+      "box-shadow": "0 4px 12px 0 rgba(0,0,0,0.4) !important"
+   },
+   ".agent-manager-header": {
+      "font-family": "'Bear Sans UI Heading', sans-serif !important",
+      "border-bottom": "1px solid rgba(255,255,255,0.08) !important"
+   },
+   ".agent-manager-toolbar": {
+      "background-color": "var(--islands-bg-surface) !important",
+      "border-radius": "var(--islands-input-radius) !important"
+   },
+   ".agent-list-container": {
+      "background-color": "var(--islands-bg-canvas) !important"
+   },
+   ".agent-item": {
+      "border-radius": "var(--islands-item-radius) !important"
+   },
+   ".agent-avatar": {
+      "border-radius": "50% !important",
+      "border": "2px solid rgba(255,255,255,0.1) !important"
+   },
+   ".agent-status-indicator": {
+      "border-radius": "50% !important",
+      "border": "2px solid var(--islands-bg-canvas) !important"
+   },
+
    "// ─── end ───": ""
   },
 "workbench.iconTheme": "vs-seti-folder",
