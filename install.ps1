@@ -1,56 +1,59 @@
-# Islands Dark Theme Installer for Windows
+# Islands Dark Theme Installer for Antigravity (Windows)
 
 param()
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "Islands Dark Theme Installer for Windows" -ForegroundColor Cyan
-Write-Host "================================================" -ForegroundColor Cyan
+Write-Host "Islands Dark Theme Installer for Antigravity (Windows)" -ForegroundColor Cyan
+Write-Host "========================================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Check if VS Code is installed
-$codePath = Get-Command "code" -ErrorAction SilentlyContinue
-if (-not $codePath) {
-    # Try to find code in common locations
-    $possiblePaths = @(
-        "$env:LOCALAPPDATA\Programs\Microsoft VS Code\bin\code.cmd",
-        "$env:ProgramFiles\Microsoft VS Code\bin\code.cmd",
-        "${env:ProgramFiles(x86)}\Microsoft VS Code\bin\code.cmd"
+function Get-AntigravityCli {
+    $cli = Get-Command "antigravity" -ErrorAction SilentlyContinue
+    if ($cli) { return $cli.Source }
+
+    $aliasCli = Get-Command "agy" -ErrorAction SilentlyContinue
+    if ($aliasCli) { return $aliasCli.Source }
+
+    $candidates = @(
+        "$env:USERPROFILE\.antigravity\antigravity\bin\antigravity.cmd",
+        "$env:USERPROFILE\.antigravity\antigravity\bin\antigravity.exe",
+        "$env:LOCALAPPDATA\Programs\Antigravity\bin\antigravity.cmd",
+        "$env:LOCALAPPDATA\Programs\Antigravity\bin\antigravity.exe",
+        "$env:ProgramFiles\Antigravity\bin\antigravity.cmd",
+        "$env:ProgramFiles\Antigravity\bin\antigravity.exe",
+        "${env:ProgramFiles(x86)}\Antigravity\bin\antigravity.cmd",
+        "${env:ProgramFiles(x86)}\Antigravity\bin\antigravity.exe"
     )
 
-    $found = $false
-    foreach ($path in $possiblePaths) {
-        if (Test-Path $path) {
-            $env:Path += ";$(Split-Path $path)"
-            $found = $true
-            break
-        }
+    foreach ($path in $candidates) {
+        if (Test-Path $path) { return $path }
     }
 
-    if (-not $found) {
-        Write-Host "Error: VS Code CLI (code) not found!" -ForegroundColor Red
-        Write-Host "Please install VS Code and make sure 'code' command is in your PATH."
-        Write-Host "You can do this by:"
-        Write-Host "  1. Open VS Code"
-        Write-Host "  2. Press Ctrl+Shift+P"
-        Write-Host "  3. Type 'Shell Command: Install code command in PATH'"
-        exit 1
-    }
+    return $null
 }
 
-Write-Host "VS Code CLI found" -ForegroundColor Green
+$antigravityCli = Get-AntigravityCli
+if (-not $antigravityCli) {
+    Write-Host "Error: Antigravity CLI not found." -ForegroundColor Red
+    Write-Host "Install Antigravity and ensure 'antigravity' command is available."
+    exit 1
+}
 
-# Get the directory where this script is located
+Write-Host "Antigravity CLI found: $antigravityCli" -ForegroundColor Green
+
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 Write-Host ""
 Write-Host "Step 1: Installing Islands Dark theme extension..."
 
-# Install by copying to VS Code extensions directory
-$extDir = "$env:USERPROFILE\.vscode\extensions\bwya77.islands-dark-1.0.0"
+$extRoot = "$env:USERPROFILE\.antigravity\extensions"
+$extDir = Join-Path $extRoot "bwya77.islands-dark-1.0.0"
+
 if (Test-Path $extDir) {
     Remove-Item -Recurse -Force $extDir
 }
+
 New-Item -ItemType Directory -Path $extDir -Force | Out-Null
 Copy-Item "$scriptDir\package.json" "$extDir\" -Force
 Copy-Item "$scriptDir\themes" "$extDir\themes" -Recurse -Force
@@ -62,29 +65,25 @@ if (Test-Path "$extDir\themes") {
     exit 1
 }
 
-# Remove extensions.json so VS Code rebuilds it cleanly on next launch
-# (previous versions of this script wrote invalid content to this file)
-$extJsonPath = "$env:USERPROFILE\.vscode\extensions\extensions.json"
+$extJsonPath = Join-Path $extRoot "extensions.json"
 if (Test-Path $extJsonPath) {
     Remove-Item $extJsonPath -Force
-    Write-Host "Cleared extensions.json (VS Code will rebuild it)" -ForegroundColor Green
+    Write-Host "Cleared extensions.json (Antigravity will rebuild it)" -ForegroundColor Green
 }
 
 Write-Host ""
 Write-Host "Step 2: Installing Custom UI Style extension..."
 try {
-    $output = code --install-extension subframe7536.custom-ui-style --force 2>&1
+    & $antigravityCli --install-extension subframe7536.custom-ui-style --force | Out-Null
     Write-Host "Custom UI Style extension installed" -ForegroundColor Green
 } catch {
     Write-Host "Could not install Custom UI Style extension automatically" -ForegroundColor Yellow
-    Write-Host "   Please install it manually from the Extensions marketplace"
+    Write-Host "   Please install it manually from Antigravity Extensions"
 }
 
 Write-Host ""
 Write-Host "Step 3: Installing Bear Sans UI fonts..."
 $fontDir = "$env:LOCALAPPDATA\Microsoft\Windows\Fonts"
-
-# Try user fonts first
 if (-not (Test-Path $fontDir)) {
     New-Item -ItemType Directory -Path $fontDir -Force | Out-Null
 }
@@ -92,77 +91,45 @@ if (-not (Test-Path $fontDir)) {
 try {
     $fonts = Get-ChildItem "$scriptDir\fonts\*.otf"
     foreach ($font in $fonts) {
-        try {
-            Copy-Item $font.FullName $fontDir -Force -ErrorAction SilentlyContinue
-        } catch {
-            # Silently continue if copy fails
-        }
+        Copy-Item $font.FullName $fontDir -Force -ErrorAction SilentlyContinue
     }
-
     Write-Host "Fonts installed" -ForegroundColor Green
-    Write-Host "   Note: You may need to restart applications to use the new fonts" -ForegroundColor DarkGray
 } catch {
     Write-Host "Could not install fonts automatically" -ForegroundColor Yellow
-    Write-Host "   Please manually install the fonts from the 'fonts/' folder"
-    Write-Host "   Select all .otf files and right-click > Install"
+    Write-Host "   Install .otf files from the 'fonts' folder manually"
 }
 
 Write-Host ""
-Write-Host "Step 4: Applying VS Code settings..."
-$settingsDir = "$env:APPDATA\Code\User"
+Write-Host "Step 4: Applying Antigravity settings..."
+$settingsDir = "$env:APPDATA\Antigravity\User"
 if (-not (Test-Path $settingsDir)) {
     New-Item -ItemType Directory -Path $settingsDir -Force | Out-Null
 }
 
 $settingsFile = Join-Path $settingsDir "settings.json"
-
-# Backup existing settings if they exist
 if (Test-Path $settingsFile) {
     $backupFile = "$settingsFile.pre-islands-dark"
     Copy-Item $settingsFile $backupFile -Force
-    Write-Host "Existing settings.json backed up to:" -ForegroundColor Yellow
-    Write-Host "   $backupFile"
-    Write-Host "   You can restore your old settings from this file if needed."
+    Write-Host "Existing settings backed up to: $backupFile" -ForegroundColor Yellow
 }
 
-# Copy Islands Dark settings
 Copy-Item "$scriptDir\settings.json" $settingsFile -Force
-Write-Host "Islands Dark settings applied" -ForegroundColor Green
+Write-Host "Islands Dark settings applied to: $settingsFile" -ForegroundColor Green
 
 Write-Host ""
-Write-Host "Step 5: Enabling Custom UI Style..."
-
-# Check if this is the first run
-$firstRunFile = Join-Path $scriptDir ".islands_dark_first_run"
+Write-Host "Step 5: Finalization..."
+$firstRunFile = Join-Path $scriptDir ".islands_dark_first_run_antigravity"
 if (-not (Test-Path $firstRunFile)) {
     New-Item -ItemType File -Path $firstRunFile | Out-Null
-    Write-Host ""
-    Write-Host "Important Notes:" -ForegroundColor Yellow
-    Write-Host "   - IBM Plex Mono and FiraCode Nerd Font Mono need to be installed separately"
-    Write-Host "   - After VS Code reloads, you may see a 'corrupt installation' warning"
-    Write-Host "   - This is expected - click the gear icon and select 'Don't Show Again'"
-    Write-Host ""
-    Read-Host "Press Enter to continue and reload VS Code"
+    Write-Host "Important:" -ForegroundColor Yellow
+    Write-Host "   - Install IBM Plex Mono and FiraCode Nerd Font Mono separately"
+    Write-Host "   - A 'corrupt installation' warning may appear after CSS injection"
+    Write-Host "   - Dismiss it with 'Don't Show Again'"
 }
 
-Write-Host "   Applying CSS customizations..."
-
 Write-Host ""
-Write-Host "Islands Dark theme has been installed!" -ForegroundColor Green
-Write-Host ""
-
-# Quit VS Code and relaunch so Custom UI Style fully initializes and patches CSS
-Write-Host "   Closing VS Code..." -ForegroundColor Cyan
-Stop-Process -Name "Code" -Force -ErrorAction SilentlyContinue
-Start-Sleep -Seconds 3
-
-Write-Host "   Relaunching VS Code..." -ForegroundColor Cyan
-Start-Process "code" -ErrorAction SilentlyContinue
-
-Write-Host ""
-Write-Host "Done!" -ForegroundColor Green
-Write-Host ""
-Write-Host "If the CSS customizations are not applied, open the Command Palette" -ForegroundColor Yellow
-Write-Host "(Ctrl+Shift+P) and run: Custom UI Style: Reload" -ForegroundColor Yellow
-
-Start-Sleep -Seconds 3
+Write-Host "Setup complete." -ForegroundColor Green
+Write-Host "Next steps:"
+Write-Host "   1. Restart Antigravity"
+Write-Host "   2. Select color theme: Islands Dark"
+Write-Host "   3. If styles do not apply, run 'Custom UI Style: Reload'"

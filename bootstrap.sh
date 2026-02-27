@@ -2,11 +2,11 @@
 
 set -e
 
-# Islands Dark Theme Bootstrap Installer
+# Islands Dark Theme Bootstrap Installer for Antigravity
 # One-liner: curl -fsSL https://raw.githubusercontent.com/bwya77/vscode-dark-islands/main/bootstrap.sh | bash
 
-echo "🏝️  Islands Dark Theme Bootstrap Installer"
-echo "=========================================="
+echo "Islands Dark Theme Bootstrap Installer for Antigravity"
+echo "======================================================="
 echo ""
 
 REPO_URL="https://github.com/bwya77/vscode-dark-islands.git"
@@ -21,7 +21,7 @@ else
     OS="Linux"
 fi
 
-echo "📥 Step 1: Downloading Islands Dark..."
+echo "Step 1: Downloading Islands Dark..."
 echo "   Repository: $REPO_URL"
 
 # Remove old temp directory if exists
@@ -38,22 +38,22 @@ fi
 echo "✓ Downloaded successfully!"
 echo ""
 
-echo "🚀 Step 2: Running installer..."
+echo "Step 2: Running installer..."
 echo ""
 
-# Run appropriate installer
+# Run installer (install.sh now targets Antigravity)
 if [[ "$OS" == "macOS" ]] || [[ "$OS" == "Linux" ]]; then
     cd "$INSTALL_DIR"
     bash install.sh
 else
-    echo "⚠️  Automatic installation not supported for this OS"
-    echo "   Please manually run: cd $INSTALL_DIR && ./install.sh"
+    echo "Automatic installation is not supported for this OS."
+    echo "Run manually: cd $INSTALL_DIR && ./install.sh"
     exit 1
 fi
 
 # Cleanup (optional - keeps the temp directory)
 echo ""
-echo "🧹 Step 3: Cleaning up..."
+echo "Step 3: Cleaning up..."
 read -p "   Remove temporary files? (y/n) " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -64,4 +64,4 @@ else
 fi
 
 echo ""
-echo -e "🎉 Done! Enjoy your Islands Dark theme!"
+echo "Done. Enjoy Islands Dark on Antigravity."

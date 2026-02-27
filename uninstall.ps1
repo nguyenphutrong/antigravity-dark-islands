@@ -1,16 +1,16 @@
-# Islands Dark Theme Uninstaller for Windows
+# Islands Dark Theme Uninstaller for Antigravity (Windows)
 
 param()
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "Islands Dark Theme Uninstaller for Windows" -ForegroundColor Cyan
-Write-Host "===========================================" -ForegroundColor Cyan
+Write-Host "Islands Dark Theme Uninstaller for Antigravity (Windows)" -ForegroundColor Cyan
+Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Step 1: Restore old settings
-Write-Host "Step 1: Restoring VS Code settings..."
-$settingsDir = "$env:APPDATA\Code\User"
+Write-Host "Step 1: Restoring Antigravity settings..."
+$settingsDir = "$env:APPDATA\Antigravity\User"
 $settingsFile = Join-Path $settingsDir "settings.json"
 $backupFile = "$settingsFile.pre-islands-dark"
 
@@ -20,7 +20,7 @@ if (Test-Path $backupFile) {
     Write-Host "   Backup file: $backupFile"
 } else {
     Write-Host "No backup found at $backupFile" -ForegroundColor Yellow
-    Write-Host "   You may need to manually update your VS Code settings."
+    Write-Host "   You may need to manually update your Antigravity settings."
 }
 
 # Step 2: Disable Custom UI Style
@@ -29,12 +29,12 @@ Write-Host "Step 2: Disabling Custom UI Style..."
 Write-Host "   Please disable Custom UI Style manually:" -ForegroundColor Yellow
 Write-Host "   1. Open Command Palette (Ctrl+Shift+P)"
 Write-Host "   2. Run 'Custom UI Style: Disable'"
-Write-Host "   3. VS Code will reload"
+Write-Host "   3. Antigravity will reload"
 
 # Step 3: Remove theme extension
 Write-Host ""
 Write-Host "Step 3: Removing Islands Dark theme extension..."
-$extDir = "$env:USERPROFILE\.vscode\extensions\bwya77.islands-dark-1.0.0"
+$extDir = "$env:USERPROFILE\.antigravity\extensions\bwya77.islands-dark-1.0.0"
 if (Test-Path $extDir) {
     Remove-Item -Recurse -Force $extDir
     Write-Host "Theme extension removed" -ForegroundColor Green
@@ -45,7 +45,7 @@ if (Test-Path $extDir) {
 # Step 4: Remove extension from extensions.json
 Write-Host ""
 Write-Host "Step 4: Unregistering extension..."
-$extJsonPath = "$env:USERPROFILE\.vscode\extensions\extensions.json"
+$extJsonPath = "$env:USERPROFILE\.antigravity\extensions\extensions.json"
 try {
     if (Test-Path $extJsonPath) {
         $extensions = Get-Content $extJsonPath -Raw | ConvertFrom-Json
@@ -75,7 +75,7 @@ Write-Host "   3. Select your preferred theme"
 Write-Host ""
 Write-Host "Islands Dark has been uninstalled!" -ForegroundColor Green
 Write-Host ""
-Write-Host "   Reload VS Code to complete the process."
+Write-Host "   Restart Antigravity to complete the process."
 Write-Host ""
 
 Start-Sleep -Seconds 3

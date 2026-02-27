@@ -1,9 +1,9 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 
-echo "🏝️  Islands Dark Theme Uninstaller for macOS/Linux"
-echo "==================================================="
+echo "Islands Dark Theme Uninstaller for Antigravity (macOS/Linux)"
+echo "============================================================="
 echo ""
 
 # Colors for output
@@ -13,10 +13,10 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Step 1: Restore old settings
-echo "⚙️  Step 1: Restoring VS Code settings..."
-SETTINGS_DIR="$HOME/.config/Code/User"
+echo "Step 1: Restoring Antigravity settings..."
+SETTINGS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/Antigravity/User"
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    SETTINGS_DIR="$HOME/Library/Application Support/Code/User"
+    SETTINGS_DIR="$HOME/Library/Application Support/Antigravity/User"
 fi
 
 SETTINGS_FILE="$SETTINGS_DIR/settings.json"
@@ -28,21 +28,21 @@ if [ -f "$BACKUP_FILE" ]; then
     echo "   Backup file: $BACKUP_FILE"
 else
     echo -e "${YELLOW}⚠️  No backup found at $BACKUP_FILE${NC}"
-    echo "   You may need to manually update your VS Code settings."
+    echo "   You may need to manually update your Antigravity settings."
 fi
 
 # Step 2: Disable Custom UI Style
 echo ""
-echo "🔧 Step 2: Disabling Custom UI Style..."
+echo "Step 2: Disabling Custom UI Style..."
 echo -e "${YELLOW}   Please disable Custom UI Style manually:${NC}"
 echo "   1. Open Command Palette (Cmd+Shift+P / Ctrl+Shift+P)"
 echo "   2. Run 'Custom UI Style: Disable'"
-echo "   3. VS Code will reload"
+echo "   3. Antigravity will reload"
 
 # Step 3: Remove theme extension
 echo ""
-echo "🗑️  Step 3: Removing Islands Dark theme extension..."
-EXT_DIR="$HOME/.vscode/extensions/bwya77.islands-dark-1.0.0"
+echo "Step 3: Removing Islands Dark theme extension..."
+EXT_DIR="$HOME/.antigravity/extensions/bwya77.islands-dark-1.0.0"
 if [ -d "$EXT_DIR" ] || [ -L "$EXT_DIR" ]; then
     rm -rf "$EXT_DIR"
     echo -e "${GREEN}✓ Theme extension removed${NC}"
@@ -52,13 +52,13 @@ fi
 
 # Step 4: Remove extension from extensions.json
 echo ""
-echo "📋 Step 4: Unregistering extension..."
+echo "Step 4: Unregistering extension..."
 if command -v node &> /dev/null; then
     node << 'UNREGISTER_SCRIPT'
 const fs = require('fs');
 const path = require('path');
 
-const extJsonPath = path.join(process.env.HOME, '.vscode', 'extensions', 'extensions.json');
+const extJsonPath = path.join(process.env.HOME, '.antigravity', 'extensions', 'extensions.json');
 if (fs.existsSync(extJsonPath)) {
     try {
         let extensions = JSON.parse(fs.readFileSync(extJsonPath, 'utf8'));
@@ -83,13 +83,13 @@ fi
 
 # Step 5: Change theme
 echo ""
-echo "🎨 Step 5: Change your color theme..."
+echo "Step 5: Change your color theme..."
 echo "   1. Open Command Palette (Cmd+Shift+P / Ctrl+Shift+P)"
 echo "   2. Search for 'Preferences: Color Theme'"
 echo "   3. Select your preferred theme"
 
 echo ""
-echo -e "${GREEN}✓ Islands Dark has been uninstalled!${NC}"
+echo -e "${GREEN}Islands Dark has been uninstalled from Antigravity.${NC}"
 echo ""
-echo "   Reload VS Code to complete the process."
+echo "   Restart Antigravity to complete the process."
 echo ""

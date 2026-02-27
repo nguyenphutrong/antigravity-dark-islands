@@ -1,5 +1,5 @@
 {
-  description = "Islands Dark Theme for VS Code";
+  description = "Islands Dark theme (legacy VS Code/VSCodium Nix packages)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

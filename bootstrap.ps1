@@ -1,19 +1,19 @@
-# Islands Dark Theme Bootstrap Installer for Windows
+# Islands Dark Theme Bootstrap Installer for Antigravity (Windows)
 # One-liner: irm https://raw.githubusercontent.com/bwya77/vscode-dark-islands/main/bootstrap.ps1 | iex
 
 param()
 
 $ErrorActionPreference = "Stop"
 
-echo "🏝️  Islands Dark Theme Bootstrap Installer"
-echo "=========================================="
+echo "Islands Dark Theme Bootstrap Installer for Antigravity"
+echo "======================================================="
 echo ""
 
 $RepoUrl = "https://github.com/bwya77/vscode-dark-islands.git"
 $Branch = "main"
 $InstallDir = "$env:TEMP\islands-dark-temp"
 
-echo "📥 Step 1: Downloading Islands Dark..."
+echo "Step 1: Downloading Islands Dark..."
 echo "   Repository: $RepoUrl"
 
 # Remove old temp directory if exists
@@ -33,22 +33,22 @@ try {
 echo "✓ Downloaded successfully"
 echo ""
 
-echo "🚀 Step 2: Running installer..."
+echo "Step 2: Running installer..."
 echo ""
 
-# Run installer
+# Run installer (install.ps1 now targets Antigravity)
 cd $InstallDir
 try {
     .\install.ps1
 } catch {
-    echo "❌ Installation failed"
+    echo "Installation failed"
     echo $_.Exception.Message
     exit 1
 }
 
 # Cleanup
 echo ""
-echo "🧹 Step 3: Cleaning up..."
+echo "Step 3: Cleaning up..."
 $remove = Read-Host "   Remove temporary files? (y/n)"
 if ($remove -eq 'y' -or $remove -eq 'Y') {
     Remove-Item -Recurse -Force $InstallDir
@@ -58,4 +58,4 @@ if ($remove -eq 'y' -or $remove -eq 'Y') {
 }
 
 echo ""
-echo "🎉 Done! Enjoy your Islands Dark theme!"
+echo "Done. Enjoy Islands Dark on Antigravity."

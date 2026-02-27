@@ -1,11 +1,11 @@
 @echo off
-REM Quick launcher for Islands Dark Antigravity installer
-REM This runs the PowerShell installer with appropriate execution policy
+REM Backward-compatible launcher.
+REM Main installer is install.ps1.
 
 echo Islands Dark Theme - Antigravity Installer
 echo ==========================================
 echo.
 
-powershell.exe -ExecutionPolicy Bypass -File "%~dp0install-antigravity.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "%~dp0install.ps1"
 
 pause
